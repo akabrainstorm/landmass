@@ -8,6 +8,8 @@ document.body.appendChild(renderer.domElement);
 var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
 camera.position.z = 100;
+controls.pRotateUp( Math.PI / 4 );
+controls.update();
 
 var texture;
 var geometry;
@@ -121,9 +123,19 @@ function Generate(size = 100, a = 25, b = 5, c = 0.5, d = 0.7) {
 	//texture.magFilter = texture.minFilter = THREE.LinearFilter;
 	texture.needsUpdate = true;
 
-	geometry = new THREE.PlaneBufferGeometry(size, size);
+	geometry = new THREE.PlaneGeometry(size, size, size, size);
+
+	for (var y = 0; y < size; y++) {
+		for (var x = 0; x < size; x++) {
+			var h = noiseMap[y*size+x] - 0.4;
+			h = Math.max(h, 0);
+			geometry.vertices[(size-y)*(size+1)+x].z = h*20;
+		}
+	}
+
 	material = new THREE.MeshBasicMaterial({map: texture});
 	land = new THREE.Mesh(geometry, material);
+	land.rotation.x = -Math.PI / 2;
 
 	scene.add(land);
 }

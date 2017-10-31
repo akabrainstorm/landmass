@@ -90,6 +90,12 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	};
 
+	this.pRotateUp = function ( angle ) {
+
+		return rotateUp(angle);
+
+	};
+
 	this.getAzimuthalAngle = function () {
 
 		return spherical.theta;
